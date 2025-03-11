@@ -1,0 +1,149 @@
+kind: M
+api_version: v1beta3
+metadata:
+  display_name: BRINES
+  name: brines
+  subject: Utilities / Communication
+  publisher: The BRINES team
+  contact_point_name:  Ji-Eun Byun
+  contact_point_email: ji-eun.byun@glasgow.ac.uk
+  summary: >
+    - Assesses surplus in energy demand after wind and solar generation (0 if demands are met solely by wind and solar)
+    - Surplus is evaluated by Monte Carlo Simulation of wind and solar generation and demands
+  description: >
+    BRINES is a computational model that performs Monte Carlo Simulation (MCS) to assess surplus energy demand after accounting for wind and solar generation, with a surplus of 0 indicating that renewable sources fully meet the demand. 
+
+    Using climate simulation data, BRINES generates MCS samples of wind and solar generation alongside energy demand. The model is designed for applications in renewable energy infrastructure planning and climate change impact assessment.
+
+    The model can be used to simulate the impacts of different infrastructure configurations on the distribution of demand surplus. It can also be used to simulate the impacts of climate change scenarios.
+
+spec:
+  command: ["python", "main.py"]
+  inputs:
+    parameters:
+      - name: ISDAFNI
+        title: Running on DAFNI
+        type: boolean
+        default: True
+        description: True or False
+        required: True
+      - name: NO_SAMPLES
+        title: Number of MCS Samples
+        type: integer
+        description: Number of MCS samples to generate
+        default: 1000
+        required: true
+      - name: START_DATE
+        title: Start Date
+        type: string
+        description: Start date for simulation
+        default: "2020-12-01"
+        required: true
+      - name: END_DATE
+        title: End Date
+        type: string
+        description: End date for simulation
+        default: "2021-02-28"
+        required: true
+
+    dataslots:
+    - name: BUSES_INFRA_FILE
+      path: inputs
+      description: JSON file containing bus infrastructure configuration.
+      default:
+        - 44689404-a58e-4a06-b456-3251d89124a7/buses.json
+      required: true
+
+    - name: WIND_GEN_INFRA_FILE
+      path: inputs
+      description: Configuration file for wind generator infrastructure.
+      default:
+        - 44689404-a58e-4a06-b456-3251d89124a7/generators_wind.json
+      required: true
+
+    - name: SOLAR_GEN_INFRA_FILE
+      path: inputs
+      description: Configuration file for solar (photovoltaic) generator infrastructure.
+      default:
+        - 44689404-a58e-4a06-b456-3251d89124a7/generators_pv.json
+      required: true
+
+    - name: TRANSMISSION_LINES_FILE
+      path: inputs
+      description: Configuration file for transmission line infrastructure.
+      default: 
+        - 44689404-a58e-4a06-b456-3251d89124a7/lines.json
+      required: true
+
+    - name: CITY_NAME_MAPPING_FILE
+      path: inputs
+      description: Mapping of city file names to actual city names, e.g., "Th_Marsh_Stocksbridge" → "Th. Marsh/Stocksbridge".
+      default:
+        - 44689404-a58e-4a06-b456-3251d89124a7/city_fname_to_name.json
+      required: true
+
+    - name: TEMPERATURE_DATA
+      path: inputs
+      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      default: 
+        - 44689404-a58e-4a06-b456-3251d89124a7
+        - 44689404-a58e-4a06-b456-3251d89124a7
+      required: true
+
+    - name: WIND_SPEED_DATA
+      path: inputs
+      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      default: 
+        - 44689404-a58e-4a06-b456-3251d89124a7
+        - 44689404-a58e-4a06-b456-3251d89124a7
+      required: true
+
+    - name: SOLAR_DATA
+      path: inputs
+      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      default: 
+        - 44689404-a58e-4a06-b456-3251d89124a7
+        - 44689404-a58e-4a06-b456-3251d89124a7
+      required: true
+
+  outputs:
+    datasets:
+      - name: temperature_data.h5
+        type: h5
+        description: >
+          Climate data of temperature data for 27 cities (processed from input file).
+      
+      - name: wind_speed_data.h5
+        type: h5
+        description: >
+          Climate data of wind speed data for 27 cities (processed from input file).
+
+      - name: solar_data.h5
+        type: h5
+        description: >
+          Climate data of solar radiation data for 27 cities (processed from input file).
+      
+      - name: temparature_samples.parquet
+        type: parquet
+        description: >
+          MCS samples of temperature data for 27 cities.
+
+      - name: wind_speed_samples.parquet
+        type: parquet
+        description: >
+          MCS samples of wind speed data for 27 cities.
+
+      - name: solar_radiation_samples.parquet
+        type: parquet
+        description: >
+          MCS samples of solar radiation data for 27 cities.
+
+      - name: demand_samples.parquet
+        type: parquet
+        description: >
+          MCS samples of energy demand data for 27 cities.
+
+      - name: loadshed_samples.parquet
+        type: parquet
+        description: >
+          MCS samples of loadshed (=(demand)-(wind and solar generation)) for 27 cities.

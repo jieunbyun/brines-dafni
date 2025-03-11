@@ -1,0 +1,142 @@
+[
+    {
+        "name":"PV Beauly",
+        "p_nom":0.2,
+        "bus":"Beauly"
+    },
+    {
+        "name":"PV Bramford",
+        "p_nom":332.4,
+        "bus":"Bramford"
+    },
+    {
+        "name":"PV Bramley",
+        "p_nom":353.2,
+        "bus":"Bramley"
+    },
+    {
+        "name":"PV Daines",
+        "p_nom":64.8,
+        "bus":"Daines"
+    },
+    {
+        "name":"PV Deeside",
+        "p_nom":286.9,
+        "bus":"Deeside"
+    },
+    {
+        "name":"PV Denny\/Bonnybridge",
+        "p_nom":32.5,
+        "bus":"Denny\/Bonnybridge"
+    },
+    {
+        "name":"PV Errochty",
+        "p_nom":0.3,
+        "bus":"Errochty"
+    },
+    {
+        "name":"PV Feckenham",
+        "p_nom":354.7,
+        "bus":"Feckenham"
+    },
+    {
+        "name":"PV Harker",
+        "p_nom":56.1,
+        "bus":"Harker"
+    },
+    {
+        "name":"PV Keadby",
+        "p_nom":278.3,
+        "bus":"Keadby"
+    },
+    {
+        "name":"PV Kemsley",
+        "p_nom":264.4,
+        "bus":"Kemsley"
+    },
+    {
+        "name":"PV London",
+        "p_nom":48.5,
+        "bus":"London"
+    },
+    {
+        "name":"PV Lovedean",
+        "p_nom":440.4,
+        "bus":"Lovedean"
+    },
+    {
+        "name":"PV Melksham",
+        "p_nom":1530.4,
+        "bus":"Melksham"
+    },
+    {
+        "name":"PV Neilston",
+        "p_nom":5.0,
+        "bus":"Neilston"
+    },
+    {
+        "name":"PV Pelham",
+        "p_nom":501.9,
+        "bus":"Pelham"
+    },
+    {
+        "name":"PV Penwortham",
+        "p_nom":101.8,
+        "bus":"Penwortham"
+    },
+    {
+        "name":"PV Peterhead",
+        "p_nom":10.8,
+        "bus":"Peterhead"
+    },
+    {
+        "name":"PV Ratcliffe",
+        "p_nom":517.3,
+        "bus":"Ratcliffe"
+    },
+    {
+        "name":"PV S.W.Penisula",
+        "p_nom":1598.7,
+        "bus":"S.W.Penisula"
+    },
+    {
+        "name":"PV Sellindge",
+        "p_nom":170.2,
+        "bus":"Sellindge"
+    },
+    {
+        "name":"PV Stella West",
+        "p_nom":59.9,
+        "bus":"Stella West"
+    },
+    {
+        "name":"PV Strathaven",
+        "p_nom":1.5,
+        "bus":"Strathaven"
+    },
+    {
+        "name":"PV Sundon\/East Claydon",
+        "p_nom":504.0,
+        "bus":"Sundon\/East Claydon"
+    },
+    {
+        "name":"PV Th. Marsh\/Stocksbridge",
+        "p_nom":137.6,
+        "bus":"Th. Marsh\/Stocksbridge"
+    },
+    {
+        "name":"PV Thornton\/Drax\/Eggborough",
+        "p_nom":108.0,
+        "bus":"Thornton\/Drax\/Eggborough"
+    },
+    {
+        "name":"PV Torness",
+        "p_nom":25.0,
+        "bus":"Torness"
+    },
+    {
+        "name":"PV Walpole",
+        "p_nom":486.5,
+        "bus":"Walpole"
+    }
+]

@@ -3,7 +3,7 @@ import os
 import argparse
 
 #######[For Local Testing]########
-os.environ["ISDAFNI"] = "True"
+"""os.environ["ISDAFNI"] = "True"
 os.environ["NO_SAMPLES"] = "1000"
 os.environ["START_DATE"] = "2004-12-01"
 os.environ["END_DATE"] = "2005-02-28"
@@ -12,9 +12,9 @@ os.environ["WIND_GEN_INFRA_FILE"] = "data/inputs/generators_wind.json"
 os.environ["SOLAR_GEN_INFRA_FILE"] = "data/inputs/generators_pv.json"
 os.environ["TRANSMISSION_LINES_INFRA_FILE"] = "data/inputs/lines.json"
 os.environ["CITY_NAME_MAPPING_FILE"] = "data/inputs/city_fname_to_name.json"
-os.environ["TEMPERATURE_DATA"] = "data/inputs/temp_ens_01.zip,data/inputs/temp_ens_04.zip"
-os.environ["WIND_SPEED_DATA"] = "data/inputs/wind_speed_ens_01.zip,data/inputs/wind_speed_ens_04.zip"
-os.environ["SOLAR_DATA"] = "data/inputs/rad_ens_01.zip,data/inputs/rad_ens_04.zip"
+os.environ["TEMPERATURE_DATA"] = "data/inputs/surface_temperature.zip"
+os.environ["WIND_SPEED_DATA"] = "data/inputs/surface_wind_speed.zip"
+os.environ["SOLAR_DATA"] = "data/inputs/surface_shortwave_radiation.zip""""
 ##################################
 
 #If DAFNI

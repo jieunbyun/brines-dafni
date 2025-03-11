@@ -84,26 +84,23 @@ spec:
 
     - name: TEMPERATURE_DATA
       path: inputs
-      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      description: Zip file containing temperature data for 27 cities (used to calcualte demand). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
       default: 
-        - 44689404-a58e-4a06-b456-3251d89124a7
-        - 44689404-a58e-4a06-b456-3251d89124a7
+        - b1d4d4bb-f55f-49f2-8672-b2708c89bbba/surface_temperature.zip
       required: true
 
     - name: WIND_SPEED_DATA
       path: inputs
-      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      description: Zip file containing wind speed data for 27 cities (used to calcualte wind energy generation). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
       default: 
-        - 44689404-a58e-4a06-b456-3251d89124a7
-        - 44689404-a58e-4a06-b456-3251d89124a7
+        - b1d4d4bb-f55f-49f2-8672-b2708c89bbba/surface_wind_speed.zip
       required: true
 
     - name: SOLAR_DATA
       path: inputs
-      description: Zip file(s) containing temperature data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE.
+      description: Zip file(s) containing radiation data for 27 cities (used to calculate solar energy generation). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
       default: 
-        - 44689404-a58e-4a06-b456-3251d89124a7
-        - 44689404-a58e-4a06-b456-3251d89124a7
+        - b1d4d4bb-f55f-49f2-8672-b2708c89bbba/surface_shortwave_radiation.zip
       required: true
 
   outputs:

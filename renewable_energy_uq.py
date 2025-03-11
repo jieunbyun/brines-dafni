@@ -12,10 +12,6 @@ import shutil
 import matplotlib
 matplotlib.use('Agg')
 
-import matplotlib.pyplot as plt
-plt.style.use('ggplot')
-import seaborn as sns
-
 from scipy.stats import multivariate_normal
 import copy
 from copulas.multivariate import GaussianMultivariate
@@ -102,7 +98,8 @@ class RenewableEnergyUQ:
 
     def process_netcdf_files(self, variable):
         """
-        Processes NetCDF files for a given variable and extracts relevant data.
+        Processes NetCDF files for a given variable from a specified ZIP archive,
+        extracting only relevant folders (e.g., ENS_01, ENS_04).
 
         Parameters:
         - variable (str): The NetCDF variable to extract (e.g., 'tas', 'sfcWind', 'rss').
@@ -111,31 +108,26 @@ class RenewableEnergyUQ:
         - dict: Dictionary where keys are city names (codenames) and values are processed DataFrames.
         """
         # Select the correct dataset key
-        file_list = {
+        file_mapping = {
             "tas": self.data_fpaths["temperature_data"],
             "sfcWind": self.data_fpaths["wind_speed_data"],
             "rss": self.data_fpaths["solar_data"]
-        }.get(variable, [])
+        }
 
-        if not file_list:
-            print(f"Error: No files found for variable '{variable}'.")
+        zip_file_path = file_mapping.get(variable, "")
+
+        if not zip_file_path:
+            print(f"Error: No file mapping found for variable '{variable}'.")
             return {}
 
         extracted_folder = "/tmp/extracted_netcdf"  # Temporary folder for extracted NetCDF files
         os.makedirs(extracted_folder, exist_ok=True)
 
+        with zipfile.ZipFile(zip_file_path[0], 'r') as zip_ref:
+            zip_ref.extractall(extracted_folder)
+
         # Extract all ZIP files
-        netcdf_files = []
-        for zip_file in file_list:
-            if not os.path.exists(zip_file):
-                print(f"Warning: ZIP file {zip_file} not found. Skipping...")
-                continue
-
-            with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-                zip_ref.extractall(extracted_folder)  # Extract contents to temp folder
-
-            # Find all extracted NetCDF files
-            netcdf_files.extend(glob.glob(os.path.join(extracted_folder, "**", "*.nc")))
+        netcdf_files = glob.glob(os.path.join(extracted_folder, "**", "*.nc"), recursive=True)
 
         if not netcdf_files:
             print(f"Error: No NetCDF files found after extracting ZIPs for {variable}.")
@@ -417,67 +409,6 @@ class RenewableEnergyUQ:
         print(f"Optimisation results saved as {filepath}")
 
     @staticmethod
-    def plot_filtered_pairplot(loadshed_path="optim_result.parquet", savepath="loadshed_pairplot.png", city_names=['Neilston', 'Stella West', 'London', 'Deeside']):
-        """
-        Creates a pairplot of loadshed values for cities, filtering only the samples where 'optim_status' is True.
-
-        Parameters:
-        loadshed_path (str): Path to the parquet file containing 
-            loadshed_dict (dict): A dictionary where:
-                - 'optim_status' (list of bool): Indicates whether the optimization was successful.
-                - City names (keys) map to lists of loadshed values (floats).
-        savepath (str): Path to save the pairplot image.
-        city_names (list of str): List of city names to include in the pairplot.
-
-        Returns:
-        None
-        """
-        # Convert dictionary to DataFrame
-        loadshed_dict = pd.read_parquet(loadshed_path)
-
-        # Filter only the rows where 'optim_status' is True
-        filtered_df = loadshed_dict[loadshed_dict['optim_status']]
-
-        # Drop 'optim_status' column as it's not needed in the pairplot
-        filtered_df = filtered_df.drop(columns=['optim_status'])
-        subset_df = filtered_df[city_names]
-
-        # Create a pairplot with corner=True for an uncluttered lower-triangle view
-        pairplot = sns.pairplot(subset_df, corner=True, diag_kind="hist")  # KDE for diagonal histograms
-        pairplot.savefig(savepath, dpi=300, bbox_inches="tight")
-        print(f"Pairplot saved successfully to {savepath}")
-
-    @staticmethod
-    def plot_histogram(loadshed_path="optim_result.parquet", savepath="loadshed_hist", column_name="total"):
-        """
-        Creates a histogram of the loadshed values of specified column.
-
-        Parameters:
-        loadshed_path (str): Path to the parquet file containing 
-            loadshed_dict (dict): A dictionary where:
-                - 'optim_status' (list of bool): Indicates whether the optimization was successful.
-                - 'total' (list of float): Total loadshed values.
-        savepath (str): Path to save the histogram image.
-        column_name (str): Name of the column to plot the histogram for.
-
-        Returns:
-        None
-        """
-        # Convert dictionary to DataFrame
-        loadshed_dict = pd.read_parquet(loadshed_path)
-
-        # Filter only the rows where 'optim_status' is True
-        filtered_df = loadshed_dict[loadshed_dict['optim_status']]
-
-        # Plot histogram of the total loadshed values
-        plt.figure(figsize=(8, 6))
-        sns.histplot(filtered_df[column_name], kde=True)
-        plt.xlabel("Total Loadshed (MW)")
-        plt.ylabel("Frequency")
-        plt.savefig(savepath, dpi=300, bbox_inches="tight")
-        print(f"Histogram saved successfully to {savepath}")
-
-    @staticmethod
     def wind_power_ratio(wind_speed, cut_in=3, rated=12, cut_out=25):
         if wind_speed <= cut_in or wind_speed >= cut_out:
             return 0
@@ -485,30 +416,6 @@ class RenewableEnergyUQ:
             return ((wind_speed - cut_in) / (rated - cut_in))**3
         else:
             return 1
-    
-    def plot_sampled_vs_actual(self, actual_df, samples_dict, variable, city1, city2):
-        actual_city1 = actual_df[city1][variable]
-        actual_city2 = actual_df[city2][variable]
-        
-        sampled_city1 = samples_dict[city1]
-        sampled_city2 = samples_dict[city2]
-        
-        plt.figure(figsize=(8, 6))
-        plt.scatter(actual_city1, actual_city2, alpha=0.3, label='Actual Data')
-        plt.scatter(sampled_city1, sampled_city2, alpha=0.3, label='Sampled Data', marker='x')
-        plt.xlabel(f'{variable} in {city1}')
-        plt.ylabel(f'{variable} in {city2}')
-        plt.title(f'Scatter Plot of {variable}: {city1} vs {city2}')
-        plt.legend()
-        plt.grid(True)
-
-        fname1 = next((k for k, v in self.city_fname_to_codename.items() if v == city1), city1)
-        fname2 = next((k for k, v in self.city_fname_to_codename.items() if v == city2), city2)
-        fname = f"samples_vs_actual_{fname1}_{fname2}_{variable}.png"
-        plt.savefig(fname)
-        print(f"Plot saved as {fname}")
-
-        plt.show()
     
 
 

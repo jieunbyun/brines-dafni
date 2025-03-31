@@ -123,7 +123,7 @@ class RenewableEnergyUQ:
         extracted_folder = "/tmp/extracted_netcdf"  # Temporary folder for extracted NetCDF files
         os.makedirs(extracted_folder, exist_ok=True)
 
-        with zipfile.ZipFile(zip_file_path[0], 'r') as zip_ref:
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
             zip_ref.extractall(extracted_folder)
 
         # Extract all ZIP files

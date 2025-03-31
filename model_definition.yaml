@@ -18,7 +18,6 @@ metadata:
     The model can be used to simulate the impacts of different infrastructure configurations on the distribution of demand surplus. It can also be used to simulate the impacts of climate change scenarios.
 
 spec:
-  command: ["python", "main.py"]
   inputs:
     parameters:
       - name: ISDAFNI
@@ -29,7 +28,7 @@ spec:
         required: True
       - name: NO_SAMPLES
         title: Number of MCS Samples
-        type: integer
+        type: number
         description: Number of MCS samples to generate
         default: 1000
         required: true
@@ -47,60 +46,18 @@ spec:
         required: true
 
     dataslots:
-    - name: BUSES_INFRA_FILE
+    - name: INFRA_FILE
       path: inputs
-      description: JSON file containing bus infrastructure configuration.
+      description: JSON file containing infrastructure configuration.
       default:
-        - 44689404-a58e-4a06-b456-3251d89124a7/buses.json
+        - d2b909cc-7335-4c55-9764-8e89dd5ebd50
       required: true
 
-    - name: WIND_GEN_INFRA_FILE
+    - name: CLIMATE_FILE
       path: inputs
-      description: Configuration file for wind generator infrastructure.
-      default:
-        - 44689404-a58e-4a06-b456-3251d89124a7/generators_wind.json
-      required: true
-
-    - name: SOLAR_GEN_INFRA_FILE
-      path: inputs
-      description: Configuration file for solar (photovoltaic) generator infrastructure.
-      default:
-        - 44689404-a58e-4a06-b456-3251d89124a7/generators_pv.json
-      required: true
-
-    - name: TRANSMISSION_LINES_FILE
-      path: inputs
-      description: Configuration file for transmission line infrastructure.
+      description: Zip file containing climate data for 27 cities. Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
       default: 
-        - 44689404-a58e-4a06-b456-3251d89124a7/lines.json
-      required: true
-
-    - name: CITY_NAME_MAPPING_FILE
-      path: inputs
-      description: Mapping of city file names to actual city names, e.g., "Th_Marsh_Stocksbridge" → "Th. Marsh/Stocksbridge".
-      default:
-        - 44689404-a58e-4a06-b456-3251d89124a7/city_fname_to_name.json
-      required: true
-
-    - name: TEMPERATURE_DATA
-      path: inputs
-      description: Zip file containing temperature data for 27 cities (used to calcualte demand). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
-      default: 
-        - a834f671-1a3c-4bd5-a531-85d509e4f7b0/surface_temperature.zip
-      required: true
-
-    - name: WIND_SPEED_DATA
-      path: inputs
-      description: Zip file containing wind speed data for 27 cities (used to calcualte wind energy generation). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
-      default: 
-        - a834f671-1a3c-4bd5-a531-85d509e4f7b0/surface_wind_speed.zip
-      required: true
-
-    - name: SOLAR_DATA
-      path: inputs
-      description: Zip file(s) containing radiation data for 27 cities (used to calculate solar energy generation). Each filename must include a city name that corresponds to a key in CITY_NAME_MAPPING_FILE. The zip file can include multiple files including the same city, in which case the data are concatenated.
-      default: 
-        - a834f671-1a3c-4bd5-a531-85d509e4f7b0/surface_shortwave_radiation.zip
+        - 8da4350e-c4e5-4884-b86b-83277022943e
       required: true
 
   outputs:
